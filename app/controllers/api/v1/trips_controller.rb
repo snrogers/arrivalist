@@ -1,11 +1,14 @@
 class Api::V1::TripsController < Api::V1Controller
   def index
-    @trips = <<~HEREDOC
-        line 1
-        line 2
-        line 3
-        HEREDOC
+    home_state = params[:home_state]
+    trip_date_min = params[:trip_date_min]
+    trip_date_max = params[:trip_date_max]
 
-    render json: @trips
+    trips = Trip.all
+    trips = trips.where(home_state: home_state) if home_state.present?
+    trips = trips.where(trip_date: trip_date_min..) if trip_date_min.present?
+    trips = trips.where(trip_date: ..trip_date_max) if trip_date_max.present?
+
+    render json: trips
   end
 end
