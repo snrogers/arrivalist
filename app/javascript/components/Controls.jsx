@@ -81,7 +81,6 @@ const Controls = (props) => {
 
   return (
     <>
-      <h1> CONTROLS </h1>
       <Autocomplete
         id="combo-box-demo"
         options={STATES}

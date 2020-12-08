@@ -1,81 +1,71 @@
-import React, { useState } from 'react'
-
-import { extent, max } from 'd3-array'
-
-import { AxisLeft, AxisBottom } from '@visx/axis'
-import { GridColumns, GridRows } from '@visx/grid'
-import * as allCurves from '@visx/curve'
+import React from 'react'
 import { Group } from '@visx/group'
+import { curveBasis } from '@visx/curve'
 import { LinePath } from '@visx/shape'
+import { Threshold } from '@visx/threshold'
 import { scaleTime, scaleLinear } from '@visx/scale'
+import { AxisLeft, AxisBottom } from '@visx/axis'
+import { GridRows, GridColumns } from '@visx/grid'
+import cityTemperature, { CityTemperature } from '@visx/mock-data/lib/mocks/cityTemperature'
 
-import { prop } from 'ramda'
+export const background = '#f3f3f3'
 
-
-
-// ----------------------------------------------------------------- //
-// Constants and Helpers
-// ----------------------------------------------------------------- //
-const curveTypes = Object.keys(allCurves)
-const lineCount = 4
-
-// data accessors
-const getX = (d) => new Date(d.trip_date)
-const getY = (d) => d.trip_count
-
+const defaultMargin = { top: 40, right: 50, bottom: 50, left: 50 }
 
 
 // ----------------------------------------------------------------- //
 // Component
 // ----------------------------------------------------------------- //
-const LineGraph = ({ width = 500, height = 500, showControls = true, trips = [] }) => {
-  const series = trips
+const LineGraph = ({ width = 600, height = 600, margin = defaultMargin, trips }) => {
+  if (width < 10 || !trips) return null
 
-  const [ showPoints, setShowPoints ] = useState(true)
-  const svgHeight = showControls ? height - 40 : height
-  const lineHeight = svgHeight / lineCount
+  // bounds
+  const xMax = width - margin.left - margin.right
+  const yMax = height - margin.top - margin.bottom
 
-  // scales
-  const xScale = scaleTime({
-    domain: extent(series, getX),
-    range: [ 50, width - 50 ],
+
+  const tripCountScale = scaleLinear({
+    domain: [
+      Math.min(...trips.map((d) => d.trip_count)),
+      Math.max(...trips.map((d) => d.trip_count)),
+    ],
+    nice: true,
+    range: [ yMax, 0 ],
   })
-  const yScale = scaleLinear({
-    domain: extent(series, getY),
-    range: [ svgHeight, 0 ],
+
+  console.log('trips', trips)
+
+  const domain = [ Math.min(...trips.map((t) => t.trip_date)), Math.max(...trips.map((t) => t.trip_date)) ]
+  console.log('domain', domain)
+
+  const tripDateScale = scaleTime({
+    domain: domain,
+    range: [ 0, xMax ],
   })
 
-  const ys = series.map(getY)
-  console.log('ys', ys)
-  window.ys = ys
-  const yMax = Math.max(...ys)
+  window.tripDateScale = tripDateScale
+  console.log('scale', trips.map((t) => tripDateScale(t.trip_date)))
 
   return (
-    <div className="visx-curves-demo">
-      <h1>{yMax}</h1>
-      <svg width={width} height={svgHeight}>
-        <rect width={width} height={svgHeight} fill="#efefef" rx={14} ry={14} />
-        <Group>
-          <AxisBottom top={svgHeight} scale={xScale} numTicks={width > 520 ? 10 : 5} />
-          <AxisLeft scale={yScale} />
+    <div>
+      <svg width={width} height={height}>
+        <rect x={0} y={0} width={width} height={height} fill={background} rx={14} />
+        <Group left={margin.left} top={margin.top}>
+          <GridRows scale={tripCountScale} width={xMax} height={yMax} stroke="#e0e0e0" />
+          <GridColumns scale={tripDateScale} width={xMax} height={yMax} stroke="#e0e0e0" />
+          <line x1={xMax} x2={xMax} y1={0} y2={yMax} stroke="#e0e0e0" />
+          <AxisBottom top={yMax} scale={tripDateScale} numTicks={width > 520 ? 10 : 5} />
+          <AxisLeft scale={tripCountScale} />
           <LinePath
-            curve={allCurves.curveLinear}
-            data={series}
-            x={(d) => xScale(getX(d)) ?? 0}
-            y={(d) => yScale(getY(d)) ?? 0}
-            stroke="#333"
-            strokeWidth={2}
-            strokeOpacity={1}
-            shapeRendering="geometricPrecision"
-            markerMid="url(#marker-circle)"
+            data={trips}
+            curve={curveBasis}
+            x={(d) => tripDateScale(d.trip_date.valueOf()) ?? 0}
+            y={(d) => tripCountScale(d.trip_count) ?? 0}
+            stroke="#222"
+            strokeWidth={1.5}
           />
         </Group>
       </svg>
-      <style jsx>{`
-        .visx-curves-demo label {
-          font-size: 12px;
-        }
-      `}</style>
     </div>
   )
 }

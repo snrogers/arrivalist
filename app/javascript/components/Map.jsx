@@ -37,64 +37,72 @@ const useStyles = makeStyles({
 const MapChart = ({ homeState, setState }) => {
   const classes = useStyles()
   return (
-    <ComposableMap projection="geoAlbersUsa">
-      <Geographies geography={geoUrl}>
-        { ({ geographies }) => (
-          <>
-            {
-              geographies.map((geo) => {
-                const state = allStates.find((s) => s.val === geo.id)
-                return (
-                  <Geography
-                    className={classes.geography}
-                    onClick={() => setState(assoc('homeState', state.id))}
-                    key={geo.rsmKey}
-                    stroke="#FFF"
-                    geography={geo}
-                    fill={homeState === state.id ? '#3A3' : '#DDD' }
-                  />
-                )
-              })
-            }
-            {
-              geographies.map((geo) => {
-                const centroid = geoCentroid(geo)
-                const state = allStates.find((s) => s.val === geo.id)
+    <div style={{ width: '600px', height: '600px' }}>
+      <ComposableMap projection="geoAlbersUsa">
+        <Geographies geography={geoUrl}>
+          { ({ geographies }) => (
+            <>
+              {
+                geographies.map((geo) => {
+                  const state = allStates.find((s) => s.val === geo.id)
+                  return (
+                    <Geography
+                      className={classes.geography}
+                      onClick={() => setState(assoc('homeState', state.id))}
+                      key={geo.rsmKey}
+                      stroke="#FFF"
+                      geography={geo}
+                      fill={homeState === state.id ? '#3A3' : '#DDD' }
+                    />
+                  )
+                })
+              }
+              {
+                geographies.map((geo) => {
+                  const centroid = geoCentroid(geo)
+                  const state = allStates.find((s) => s.val === geo.id)
 
-                return (
-                  <g key={geo.rsmKey + '-name'}>
-                    { state &&
+                  return (
+                    <g key={geo.rsmKey + '-name'}>
+                      { state &&
                     centroid[0] > -160 &&
                     centroid[0] < -67 &&
                     (Object.keys(offsets).indexOf(state.id) === -1
                       ? (
-                        <Marker coordinates={centroid}>
-                          <text y="2" fontSize={14} textAnchor="middle" style={{ pointerEvents: 'none' }}>
-                            {state.id}
-                          </text>
-                        </Marker>
+                        <>
+                          {/* Normal State Labels */}
+                          <Marker coordinates={centroid}>
+                            <text y="2" fontSize={14} textAnchor="middle" style={{ pointerEvents: 'none' }}>
+                              {state.id}
+                            </text>
+                          </Marker>
+                        </>
                       )
-                      : (/* Offset States (New England) */
-                        <Annotation
-                          subject={centroid}
-                          dx={offsets[state.id][0]}
-                          dy={offsets[state.id][1]}
-                        >
-                          <text x={4} fontSize={14} alignmentBaseline="middle">
-                            {state.id}
-                          </text>
-                        </Annotation>
+                      : (
+                        <>
+                          {/* Offset State Labels (New England) */}
+                          <Annotation
+                            subject={centroid}
+                            dx={offsets[state.id][0]}
+                            dy={offsets[state.id][1]}
+                          >
+                            <text x={4} fontSize={14} alignmentBaseline="middle">
+                              {state.id}
+                            </text>
+                          </Annotation>
+                        </>
                       )
                     ) }
-                  </g>
-                )
-              }) }
-          </>
-        )}
-      </Geographies>
-    </ComposableMap>
+                    </g>
+                  )
+                }) }
+            </>
+          )}
+        </Geographies>
+      </ComposableMap>
+    </div>
   )
 }
 
-export default MapChart
 
+export default MapChart

@@ -74,15 +74,15 @@ const HelloWorld = () => {
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <Grid container>
-        <Grid item md={6}>
+      <Controls {...state } setState={setState} />
+      <Grid container spacing={4}>
+        <Grid item l={6}>
           <Map {...state } setState={setState} />
         </Grid>
-        <Grid item md={6}>
+        <Grid item l={6}>
           <LineGraph {...state } />
         </Grid>
       </Grid>
-      <Controls {...state } setState={setState} />
     </MuiPickersUtilsProvider>
   )
 }
