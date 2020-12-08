@@ -4,9 +4,9 @@ import React from 'react'
 // ----------------------------------------------------------------- //
 // Component
 // ----------------------------------------------------------------- //
-const Controls = () => (
-  <h1> CONTROLS </h1>
+const Map = () => (
+  <h1> MAP </h1>
 )
 
 
-export default Controls
+export default Map
