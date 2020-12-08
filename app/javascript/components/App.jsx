@@ -9,9 +9,8 @@ import * as I from 'inflect'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import { formatISO } from 'date-fns/fp'
 
-import * as R from 'ramda'
 import {
-  applySpec, assoc, compose, curry, fromPairs, map, mergeLeft, pipe, prop, toPairs,
+  applySpec, compose, curry, fromPairs, map, mergeLeft, pipe, prop, toPairs,
 } from 'ramda'
 
 import BlurLoader from './BlurLoader'
@@ -53,9 +52,7 @@ const HelloWorld = () => {
   const [ state, setState ] = useState(INITIAL_STATE)
 
   const { homeState, loading, tripDateMin, tripDateMax } = state
-  window.formatISO = formatISO
 
-  console.log('state', state)
   useEffect(() => {
     setState(mergeLeft({ trips: [], loading: true }))
 

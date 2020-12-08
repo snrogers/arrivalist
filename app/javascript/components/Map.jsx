@@ -1,5 +1,4 @@
 import React from 'react'
-import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import { geoCentroid } from 'd3-geo'
 import { scaleLinear } from '@visx/scale'
@@ -42,8 +41,6 @@ const MapChart = ({ homeState, setState, trips = [] }) => {
     groupBy(prop('home_state')),
     map((stateTrips) => stateTrips.map(prop('trip_count')).reduce(add, 0)),
   )()
-
-  console.log('stateSums', stateTripCounts)
 
   const heatScale = scaleLinear({
     domain: [ Math.min(...values(stateTripCounts)), Math.max(...values(stateTripCounts)) ],

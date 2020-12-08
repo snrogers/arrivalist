@@ -9,11 +9,6 @@ class Api::V1::TripsController < Api::V1Controller
     trips = trips.where(trip_date: trip_date_min..) if trip_date_min.present?
     trips = trips.where(trip_date: ..trip_date_max) if trip_date_max.present?
 
-
-    # TODO: REMOVE THESE
-    # trips = trips.limit(500)
-    # trips = trips.where(home_state: 'AL')
-
     render json: trips
   end
 end

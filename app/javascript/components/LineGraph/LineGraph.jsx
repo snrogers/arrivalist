@@ -2,11 +2,9 @@ import React from 'react'
 import { Group } from '@visx/group'
 import { curveBasis } from '@visx/curve'
 import { LinePath } from '@visx/shape'
-import { Threshold } from '@visx/threshold'
 import { scaleTime, scaleLinear } from '@visx/scale'
 import { AxisLeft, AxisBottom } from '@visx/axis'
 import { GridRows, GridColumns } from '@visx/grid'
-import cityTemperature, { CityTemperature } from '@visx/mock-data/lib/mocks/cityTemperature'
 
 export const background = '#f3f3f3'
 
@@ -33,18 +31,12 @@ const LineGraph = ({ width = 600, height = 600, margin = defaultMargin, trips })
     range: [ yMax, 0 ],
   })
 
-  console.log('trips', trips)
-
   const domain = [ Math.min(...trips.map((t) => t.trip_date)), Math.max(...trips.map((t) => t.trip_date)) ]
-  console.log('domain', domain)
 
   const tripDateScale = scaleTime({
     domain: domain,
     range: [ 0, xMax ],
   })
-
-  window.tripDateScale = tripDateScale
-  console.log('scale', trips.map((t) => tripDateScale(t.trip_date)))
 
   return (
     <div>

@@ -3,7 +3,6 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 
 
 const BlurLoader = ({ loading, children }) => {
-  console.log('loading', loading)
   return (
     <div style={{ position: 'relative' }}>
       {
