@@ -1,5 +1,6 @@
 import React from 'react'
 import Autocomplete from '@material-ui/lab/Autocomplete'
+import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
 import { DatePicker } from '@material-ui/pickers'
 
@@ -10,6 +11,7 @@ import { DATE_MIN, DATE_MAX } from './constants'
 // Constants
 // ----------------------------------------------------------------- //
 const STATES = [
+  { name: 'ALL', abbreviation: undefined },
   { name: 'ALABAMA', abbreviation: 'AL' },
   { name: 'ALASKA', abbreviation: 'AK' },
   { name: 'AMERICAN SAMOA', abbreviation: 'AS' },
@@ -80,33 +82,37 @@ const Controls = (props) => {
   const { homeState, tripDateMin, tripDateMax, setState } = props
 
   return (
-    <>
-      <Autocomplete
-        id="combo-box-demo"
-        options={STATES}
-        getOptionLabel={(option) => option.name}
-        style={{ width: 300 }}
-        onChange={(_e, value) => setState(assoc('homeState', value.abbreviation))}
-        value={STATES.find((s) => s.abbreviation === homeState)}
-        renderInput={(params) => <TextField {...params} label="State" variant="outlined" />}
-      />
+    <Grid container spacing={1} alignItems="center">
+      <Grid item>
+        <Autocomplete
+          id="combo-box-demo"
+          options={STATES}
+          getOptionLabel={(option) => option.name}
+          style={{ width: 300 }}
+          onChange={(_e, value) => setState(assoc('homeState', value.abbreviation))}
+          value={STATES.find((s) => s.abbreviation === homeState)}
+          renderInput={(params) => <TextField {...params} label="State" variant="outlined" />}
+        />
+      </Grid>
 
-      <DatePicker
-        label="Time Range Start"
-        minDate={DATE_MIN.toISOString()}
-        maxDate={DATE_MAX.toISOString()}
-        value={tripDateMin}
-        onChange={(date) => setState(assoc('tripDateMin', date))}
-      />
+      <Grid item>
+        <DatePicker
+          label="Time Range Start"
+          minDate={DATE_MIN.toISOString()}
+          maxDate={DATE_MAX.toISOString()}
+          value={tripDateMin}
+          onChange={(date) => setState(assoc('tripDateMin', date))}
+        />
 
-      <DatePicker
-        label="Time Range End"
-        minDate={DATE_MIN.toISOString()}
-        maxDate={DATE_MAX.toISOString()}
-        value={tripDateMax}
-        onChange={(date) => setState(assoc('tripDateMax', date))}
-      />
-    </>
+        <DatePicker
+          label="Time Range End"
+          minDate={DATE_MIN.toISOString()}
+          maxDate={DATE_MAX.toISOString()}
+          value={tripDateMax}
+          onChange={(date) => setState(assoc('tripDateMax', date))}
+        />
+      </Grid>
+    </Grid>
   )
 }
 
