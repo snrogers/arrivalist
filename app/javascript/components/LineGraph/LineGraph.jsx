@@ -8,19 +8,30 @@ import { GridRows, GridColumns } from '@visx/grid'
 
 export const background = '#f3f3f3'
 
-const defaultMargin = { top: 40, right: 50, bottom: 50, left: 50 }
+const defaultMargin = { top: 40, right: 50, bottom: 50, left: 75 }
+import { groupBy, map, pipe, prop, values } from 'ramda'
 
 
 // ----------------------------------------------------------------- //
 // Component
 // ----------------------------------------------------------------- //
-const LineGraph = ({ width = 600, height = 600, margin = defaultMargin, trips }) => {
+const LineGraph = ({ width = 600, height = 600, margin = defaultMargin, trips, homeState }) => {
   if (width < 10 || !trips) return null
 
-  // bounds
+  // merge values by date to clean up the signal (especially important when looking at ALL)
+  trips = pipe(
+    () => trips,
+    groupBy(prop('trip_date')),
+    map(
+      (dayTrips) => dayTrips.reduce(
+        (a, b) => ({ ...b, trip_count: a.trip_count + b.trip_count }),
+        { trip_count: 0 },
+      )),
+    values,
+  )()
+
   const xMax = width - margin.left - margin.right
   const yMax = height - margin.top - margin.bottom
-
 
   const tripCountScale = scaleLinear({
     domain: [
