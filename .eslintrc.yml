@@ -3,6 +3,8 @@ env:
   commonjs: true
   es6: true
   node: true
+extends:
+  - 'plugin:react/recommended'
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
@@ -42,10 +44,6 @@ rules:
   linebreak-style:
     - error
     - unix
-  max-len:
-    - warn
-    - code: 90
-      ignoreTrailingComments: true
   no-console:
     - off
   no-multi-spaces:
