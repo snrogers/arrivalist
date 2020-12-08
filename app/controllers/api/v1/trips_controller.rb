@@ -4,7 +4,7 @@ class Api::V1::TripsController < Api::V1Controller
     trip_date_min = params[:trip_date_min]
     trip_date_max = params[:trip_date_max]
 
-    trips = Trip.all
+    trips = Trip.all.order(trip_date: :asc).limit(500)
     trips = trips.where(home_state: home_state) if home_state.present?
     trips = trips.where(trip_date: trip_date_min..) if trip_date_min.present?
     trips = trips.where(trip_date: ..trip_date_max) if trip_date_max.present?

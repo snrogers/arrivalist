@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 import Axios from 'axios'
-
 import * as I from 'inflect'
+
 import * as R from 'ramda'
+import { assoc } from 'ramda'
 
 import Controls from './Controls'
+import LineGraph from './LineGraph'
 import Map from './Map'
 
 
@@ -18,6 +20,7 @@ const INIT_STATE = {
   homeState: undefined,
   tripDateMin: undefined,
   tripDateMax: undefined,
+  trips: undefined
 }
 
 const mapKeys = R.curry(
@@ -43,18 +46,20 @@ const HelloWorld = ({ greeting }) => {
       () => ({ homeState,tripDateMin,tripDateMax }),
       mapKeys(I.underscore)
     )()
-    console.log('params', params)
+
     Axios.get(`${BASE_URL}/api/v1/trips`, { params })
       .then(res => {
-        console.log(res)
+        const trips = res.data
+        setState(assoc('trips', trips))
       })
       .catch(err => console.error(err))
   }, [homeState, tripDateMin, tripDateMax])
 
   return (
     <>
-      <Map />
-      <Controls />
+      <Map {...state }/>
+      <LineGraph {...state }/>
+      <Controls {...state }/>
     </>
   )
 }

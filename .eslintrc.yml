@@ -1,0 +1,81 @@
+env:
+  browser: true
+  commonjs: true
+  es6: true
+  node: true
+globals:
+  Atomics: readonly
+  SharedArrayBuffer: readonly
+parserOptions:
+  ecmaVersion: 2021
+  sourceType: module
+rules:
+  array-bracket-spacing:
+    - error
+    - always
+  arrow-parens:
+    - error
+    - always
+    - requireForBlockBody: false
+  block-spacing:
+    - error
+    - always
+  camelcase:
+    - off
+  comma-dangle:
+    - error
+    - always-multiline
+  comma-spacing:
+    - error
+    - after: true
+      before: false
+  indent:
+    - error
+    - 2
+  key-spacing:
+    - error
+    - afterColon: true
+  linebreak-style:
+    - error
+    - unix
+  max-len:
+    - warn
+    - code: 90
+      ignoreTrailingComments: true
+  no-console:
+    - off
+  no-multi-spaces:
+    - error
+  no-trailing-spaces:
+    - error
+  no-undef:
+    - error
+  no-unused-vars:
+    - warn
+    - argsIgnorePattern: "^_"
+      varsIgnorePattern: "^_"
+  object-curly-spacing:
+    - error
+    - always
+  padded-blocks:
+    - error
+    - never
+  quotes:
+    - error
+    - single
+  semi:
+    - error
+    - never
+  space-in-parens:
+    - error
+    - never
+  space-infix-ops:
+    - error
+  space-before-blocks:
+    - error
+    - always
+  keyword-spacing:
+    - error
+    - after: true
+      before: true
+
