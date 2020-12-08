@@ -7,8 +7,12 @@ globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
 parserOptions:
+  ecmaFeatures:
+    jsx: true
   ecmaVersion: 2021
   sourceType: module
+plugins:
+  - react
 rules:
   array-bracket-spacing:
     - error
